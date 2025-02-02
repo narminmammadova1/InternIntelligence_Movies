@@ -5,7 +5,6 @@ import React, { useState } from 'react'
 
 
 const Card = ({movie}:{movie:MovieType}) => {
-const [selectedFilm,setSelectedFilm]=useState<number |undefined>(undefined)
 const router=useRouter()
 const {push}=router
   const imageUrl = movie.poster_path
@@ -14,8 +13,7 @@ const {push}=router
 
   return (
     <div onClick={()=>{
-      setSelectedFilm(movie.id)
-      router.push(`/details?id=${movie.id}`)
+      push(`/details?id=${movie.id}`)
     }}
     className=' bg-orange-400 p-2 text-white  border-white  w-[250px] h-[350px] border-dotted border-2 '>
  <div className='w-full h-[280px] relative  bg-red-900rounded-md '>
