@@ -11,10 +11,8 @@ const [movieDetails, setMovieDetails] = useState<MovieType | null>(null);
 const apiKey="7b948acabbc0eafc206827b05a3ac9b7"
 
 const getDetails=async()=>{
-
-    if(id){
+  if(id){
         const url=`https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}`
-        
         try{
         const response=await fetch(url)
         const data=await response.json()
@@ -23,15 +21,12 @@ const getDetails=async()=>{
        
         
         }catch(err){console.log(err);
-        }
-        
-        
-            }
+        } }
 }
   
 useEffect(()=>{
     getDetails()
-},[id])
+},[])
 
 const imageUrl = movieDetails?.poster_path
 ? `https://image.tmdb.org/t/p/w500${movieDetails.poster_path}`
@@ -48,12 +43,12 @@ if (!movieDetails) return<div className="flex w-full h-screen justify-center ite
     
       </Link>
     </header>
-    <div className='flex justify-start gap-10 text-white m-10'>
-      <div className=' rounded-md'>
-        <Image className='bg-red-800 rounded-md  w-[350px] h-[400px]' src={imageUrl}  width={200} height={200} alt='detail'/>
+    <div className='  md:flex m-2 lg:flex sm:justify-center lg:justify-start gap-10 text-white lg:m-10'>
+      <div className=' rounded-md  flex justify-center '>
+        <Image className='bg-red-800 rounded-md w-[250px] h-[200] md:w-[350px] md:h-[300px] lg:w-[350px] lg:h-[400px]' src={imageUrl}  width={200} height={200} alt='detail'/>
       </div>
-      <div className='w-1/2 text-orange-500 font-bold '>
-        <h1 className='text-4xl text-orange-500 '>{movieDetails.title}</h1>
+      <div className='sm:w-full md:w-full  lg:w-1/2 text-orange-500 font-bold '>
+        <h1 className='text-4xl text-center text-orange-500 '>{movieDetails.title}</h1>
         <hr />
 
         <p className='my-2 '>Years: <span className='text-white  font-normal  '> {movieDetails.release_date}</span></p>

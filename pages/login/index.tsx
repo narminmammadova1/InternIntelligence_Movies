@@ -1,30 +1,82 @@
+import { signInWithEmailAndPassword } from 'firebase/auth'
 import Link from 'next/link'
-
-import React from 'react'
+import { useRouter } from 'next/router'
+ import {auth} from "../../firebase"
+import React, { useState } from 'react'
 
 const Login = () => {
+ const [email,setEmail]=useState("")
+ const [password,setPassword]=useState("")
+ const [error,setError]=useState("")
+ const router=useRouter()
+//  const [isLoginn,setIsLoginn]=useState(false)
+
+const handleLogin=async(e:React.FormEvent<HTMLFormElement>)=>{
+
+  e.preventDefault()
+  try{
+await signInWithEmailAndPassword(auth ,email,password)
+// setIsLoginn(true)
+localStorage.setItem("isLogin","true")
+
+router.push("/")
+
+  }catch(err){
+    setError("invalid email or password")
+    console.log("login error",err);
+    
+  }
+}
+
   return (
     <div className=''>
-        <header className='p-4'>
-      <Link href="/">  <button className=' text-orange-500'>Home</button>
-    
-      </Link>
-    </header>
-    <div className='w-1/2 m-auto mt-10 text-white text-center'>
+      <header className='p-4'>
+        <Link href="/">
+          <button className='text-orange-500'>Home</button>
+        </Link>
+      </header>
+      
+      <div className='w-1/2 m-auto mt-10 text-white text-center'>
+        <h1 className='text-4xl text-orange-500'>Sign In</h1>
 
-    <h1 className='text-4xl text-orange-500'>Sign In</h1>
-            <form className='p-4 border-2 text-black mt-4 border-orange-500 rounded-md flex flex-col gap-4' action="">
-            <input className='p-2 rounded-md  text-black' type="email" placeholder='email' />
-    <input className='p-2 rounded-md  text-black' type="password"  placeholder="password"/>
-    <button className='w-full bg-orange-500 p-2 rounded-md'>Sign In</button>
-   </form>
-   <Link href="/signup">
-   <button className='text-orange-500 '>... Sign up</button>
-   </Link>
-    </div>
-   
+        {error && <div className="text-red-500 mb-4">{error}</div>}
+
+        <form 
+          className='p-4 border-2 text-black mt-4 border-orange-500 rounded-md flex flex-col gap-4' 
+          onSubmit={handleLogin}  
+        >
+          <input 
+            className='p-2 rounded-md text-black' 
+            type="email" 
+            placeholder='Email' 
+            value={email} 
+            onChange={(e) => setEmail(e.target.value)} 
+          />
+
+          <input 
+            className='p-2 rounded-md text-black' 
+            type="password" 
+            placeholder="Password" 
+            value={password} 
+            onChange={(e) => setPassword(e.target.value)} 
+          />
+
+          <button 
+            type="submit" 
+            className='w-full bg-orange-500 p-2 rounded-md'
+          >
+            Sign In
+          </button>
+        </form>
+
+        <Link href="/signup">
+          <button className='text-orange-500 mt-4'>... Sign up</button>
+        </Link>
+      </div>
     </div>
   )
+
+
 }
 
 export default Login
