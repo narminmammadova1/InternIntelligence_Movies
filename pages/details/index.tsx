@@ -26,7 +26,7 @@ const getDetails=async()=>{
   
 useEffect(()=>{
     getDetails()
-},[])
+},[getDetails])
 
 const imageUrl = movieDetails?.poster_path
 ? `https://image.tmdb.org/t/p/w500${movieDetails.poster_path}`

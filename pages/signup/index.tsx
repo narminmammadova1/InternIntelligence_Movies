@@ -6,7 +6,6 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import {auth,createUserWithEmailAndPassword,firestore} from "../../firebase"
 import { doc, setDoc } from "firebase/firestore";
-import { log } from 'util';
 
 
 const SignUp = () => {
@@ -20,7 +19,14 @@ const validationSchema=Yup.object({
   .oneOf([Yup.ref('password'),undefined], 'Passwords must match')
   .required('Confirm Password is required'),})
 
-  const handleSignUp = async (values:any) => {
+
+  interface signUpProps{
+    email:string,
+    password:string,
+    name:string,
+    surname:string
+  }
+  const handleSignUp= async (values:signUpProps) => {
     const { email, password, name, surname } = values;
 
     try {
@@ -62,7 +68,7 @@ return (
         validationSchema={validationSchema}
         onSubmit={handleSignUp}
       >
-        {({ errors, touched }) => (
+        {() => (
           <Form className='p-4 border-2 text-black mt-4 border-orange-500 rounded-md flex flex-col gap-4'>
             <Field
               className='p-2 rounded-md text-black'
