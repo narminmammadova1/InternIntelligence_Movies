@@ -63,7 +63,7 @@ return (
         <button className='text-orange-500'>Home</button>
       </Link>
     </header>
-    <div className='w-1/2 m-auto mt-10 text-white text-center'>
+    <div className='w-3/4 lg:w-1/2 m-auto mt-10 text-white text-center'>
       <h1 className='text-4xl text-orange-500'>Sign Up</h1>
       <Formik
         initialValues={initialValues}

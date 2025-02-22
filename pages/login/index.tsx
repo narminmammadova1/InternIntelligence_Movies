@@ -36,7 +36,7 @@ router.push("/")
         </Link>
       </header>
       
-      <div className='w-1/2 m-auto mt-10 text-white text-center'>
+      <div className='w-3/4 lg:w-1/2 m-auto mt-10 text-white text-center'>
         <h1 className='text-4xl text-orange-500'>Sign In</h1>
 
         {error && <div className="text-red-500 mb-4">{error}</div>}

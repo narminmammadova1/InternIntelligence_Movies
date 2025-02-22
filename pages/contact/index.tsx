@@ -10,7 +10,7 @@ const Contact = () => {
     
       </Link>
     </header>
-    <div className='w-1/2 m-auto text-white text-center'>
+    <div className=' w-3/4 lg:w-1/2 m-auto text-white text-center'>
     
     <h1 className=' font-medium text-4xl text-orange-500'>Contact us</h1>
           <div>

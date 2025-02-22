@@ -21,7 +21,7 @@ const {push}=router
                 <li  onClick={()=>{handleGenreClick("Animation")}}>Animation</li>
                 <li  onClick={()=>{handleGenreClick("Drama")}}>Drama</li>
                 <li onClick={() => handleGetFavorites()}>My Favorites</li>
-                <li onClick={()=>{push("/")}}>Home</li>
+                {/* <li onClick={()=>{push("/")}}>Home</li> */}
                 <li onClick={()=>{push("/about")}}>About</li>
                 <li onClick={()=>{push("/contact")}}>Contact</li>
                 {isLogin === 'true' ? (
