@@ -23,53 +23,36 @@ const  Header: React.FC<HeaderProps> = ({ onGenreChange,onSearchChange }) => {
   const [genre, setGenre] = useState("")
 const [searchQuery,setSearchQuery]=useState("")
 
-const [debouncedSearchQuery]=useDebounce(searchQuery,1000)
-// const [searchResult,setSearchResult]=useState<any[]>([])
-// const [loading,setLoading]=useState(false)
+const [debouncedSearchQuery]=useDebounce(searchQuery,500)
+
 const [isLogin, setIsLogin] = useState<null | string>(null);
 const [ modal,setModal]=useState(false)
 const [sidebar,setSidebar]=useState(false)
-// const[isFav,setIIsFav]=useState(true)
   const handleGenreClick = (selectedGenre: string) => {
     setGenre(selectedGenre) 
     onGenreChange(selectedGenre);
-    // localStorage.removeItem("loginAndIsFav")
     localStorage.setItem("loginAndIsFav","false")
 console.log(genre);
 
 
   }
-//   const searchMovies= async (query:string)=>{
-
-//     // const apiKey = '7b948acabbc0eafc206827b05a3ac9b7';
-//     // const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${query}`;
-// // setLoading(true)
-// try{
-// // const response=await fetch(url)
-// // const data=await response.json()
-// // const localSearch=data.results
-// setSearchQuery(""); 
-
-// }catch(err){console.log(err);
-// }
-// finally {
-//   // setLoading(false); 
-// }
-//   }
 
   useEffect(() => {
     if (debouncedSearchQuery) {
-      // searchMovies(debouncedSearchQuery);
 setSearchQuery(""); 
       
     } 
   }, [debouncedSearchQuery]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-    onSearchChange(searchQuery);
-
+    setSearchQuery(e.target.value); 
   };
+  
+  useEffect(() => {
+    if (debouncedSearchQuery) {
+      onSearchChange(debouncedSearchQuery); 
+        }
+  }, [debouncedSearchQuery, onSearchChange]);
   useEffect(() => {
     if (typeof window !== "undefined") {
       const loginStatus = localStorage.getItem("isLogin");
