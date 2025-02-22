@@ -23,7 +23,7 @@ const  Header: React.FC<HeaderProps> = ({ onGenreChange,onSearchChange }) => {
   const [genre, setGenre] = useState("")
 const [searchQuery,setSearchQuery]=useState("")
 
-const [debouncedSearchQuery]=useDebounce(searchQuery,500)
+const [debouncedSearchQuery]=useDebounce(searchQuery,1000)
 
 const [isLogin, setIsLogin] = useState<null | string>(null);
 const [ modal,setModal]=useState(false)
