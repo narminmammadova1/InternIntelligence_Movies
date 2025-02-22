@@ -11,14 +11,12 @@ const Login = () => {
  const [password,setPassword]=useState("")
  const [error,setError]=useState("")
  const router=useRouter()
-//  const [isLoginn,setIsLoginn]=useState(false)
 
 const handleLogin=async(e:React.FormEvent<HTMLFormElement>)=>{
 
   e.preventDefault()
   try{
 await signInWithEmailAndPassword(auth ,email,password)
-// setIsLoginn(true)
 localStorage.setItem("isLogin","true")
 
 router.push("/")
@@ -73,9 +71,9 @@ router.push("/")
           </motion.button>
         </form>
         <div className=''>
-  <p className=' inline-block pe-4'>If you don't have an account?</p>
+  <p className='text-[12px] lg:text-base inline-block pe-2'>If you don&apos;t have an account?</p>
   <Link href="/signup">
-    <button className="text-orange-500 mt-4">Sign Up</button>
+    <button className="text-orange-500 lg:mt-4 text-[12px] lg:text-base">Sign Up</button>
   </Link>
 </div>
        

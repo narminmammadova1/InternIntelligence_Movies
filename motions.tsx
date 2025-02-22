@@ -32,7 +32,7 @@ export const cardVariants = {
   export const slideInVariants = {
     initial: { y: '100vh' }, 
     animate: { y: 0, transition: { duration: 1 } },
-    exit: { y: '100vw', transition: { duration: 0.8 } },
+    exit: { y: '100vh', transition: { duration: 0.8 } },
   };
 
 
@@ -45,4 +45,8 @@ export const cardVariants = {
     }
   };
 
- 
+  export const sidebarVariants = {
+    initial: { x: '100vw' }, // Sağdan dışarıda
+    animate: { x: 0, transition: { duration: 0.1 } }, // Giriş yapacak
+    exit: { x: '100vw', transition: { duration: 0.5 } }, // Sağdan çıkacak
+  };

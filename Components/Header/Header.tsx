@@ -9,7 +9,7 @@ import {auth} from "../../firebase"
 import Sidebar from '../Sidebar/Sidebar';
 
 import {motion} from 'framer-motion'
-import { cardVariants, liVariants } from '@/motions';
+import { cardVariants, liVariants, sidebarVariants } from '@/motions';
 
 interface HeaderProps {
   onGenreChange: (genre: string) => void;
@@ -230,11 +230,18 @@ useEffect(() => {
         </div>
       )}
 
+{sidebar && (
+  <motion.div
+    variants={sidebarVariants}
+    initial="initial"
+    animate="animate"
+    exit="exit"
+    className="top-0 md:hidden right-0 fixed  z-50"
+  >
+    <Sidebar handleLogout={handleLogout} isLogin={isLogin} handleGenreClick={handleGenreClick} handleGetFavorites={handleGetFavorites} setSidebar={setSidebar} />
+  </motion.div>
+)}
 
-      {sidebar && (<div className='  top-0 right-0 fixed z-10'>
-<Sidebar handleGenreClick ={handleGenreClick} handleGetFavorites={handleGetFavorites} setSidebar={setSidebar}/>
-
-      </div>)}
     </header>
 
   )

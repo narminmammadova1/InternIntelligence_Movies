@@ -18,3 +18,11 @@ export interface MovieType{
     release_date:string
 
   }
+
+  export interface SidebarProps {
+    handleGenreClick: (genre: string) => void; 
+    handleGetFavorites: () => void;
+    setSidebar: (value: boolean) => void;
+    isLogin:string | null;
+    handleLogout:()=>void
+  }

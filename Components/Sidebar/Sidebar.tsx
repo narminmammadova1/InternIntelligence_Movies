@@ -1,20 +1,11 @@
+import { SidebarProps } from '@/interfaces/interfaces';
+import Link from 'next/link';
 import { useRouter } from 'next/router'
 import React from 'react'
 
-
-interface SidebarProps {
-  handleGenreClick: (genre: string) => void; 
-  handleGetFavorites: () => void;
-  setSidebar: (value: boolean) => void;
-}
-
-const Sidebar:React.FC<SidebarProps> = ({handleGenreClick,handleGetFavorites,setSidebar}) => {
+const Sidebar:React.FC<SidebarProps> = ({handleGenreClick,handleGetFavorites,setSidebar,handleLogout,isLogin}) => {
 const router=useRouter()
 const {push}=router
-
-
-
-
 
   return (
     <div className=' bg-orange-500 bg-opacity-70  px-2 h-screen py-2 '>
@@ -33,7 +24,25 @@ const {push}=router
                 <li onClick={()=>{push("/")}}>Home</li>
                 <li onClick={()=>{push("/about")}}>About</li>
                 <li onClick={()=>{push("/contact")}}>Contact</li>
-                <li onClick={()=>{push("/login")}}>Sign In</li>
+                {isLogin === 'true' ? (
+              <Link href="/">
+                <button
+                
+                onClick={
+                  handleLogout
+           } className='border-2 rounded-lg border-orange-500 px-2'>
+                  Logout
+                </button>
+              </Link>
+            ) : (
+              <Link href="/login">
+                <button 
+                className='border-2 rounded-lg border-orange-500 px-2'>
+                  Sign In
+                </button>
+              </Link>
+            )}
+                {/* <li onClick={()=>{push("/login")}}>Sign In</li> */}
 
             </ul>
         </div>
