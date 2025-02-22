@@ -7,27 +7,24 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { firestore,auth } from "../../firebase"; 
 import { FaRegHeart, FaHeart } from "react-icons/fa6";
 import { doc, setDoc, deleteDoc, getDoc } from 'firebase/firestore';
+import { User } from 'firebase/auth';
 
-const Card = ({ movie }: { movie: MovieType }) => {
+import {motion} from 'framer-motion'
+import { cardVariants } from '@/motions';
+
+const Card = ({ movie }: { movie: MovieType } ) => {
   const [isFav, setIsFav] = useState(false);
-  const [currentUser, setCurrentUser] = useState<any>(null); 
+  const [currentUser, setCurrentUser] = useState<User | null>(null); 
   const [isLogged,setIsLogged]=useState(false)
   const router = useRouter();
   const { push } = router;
-
-  // useEffect(() => {
-    
-  //  const localUser=localStorage.getItem("loggedUser")
-  // //  setIsLogged(localUser)
-   
-  // }, []);
+  const [flash, setFlash] = useState(false);
 
 
   const imageUrl = movie.poster_path
     ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
     : '';
-  const movieYear = movie.release_date;
-
+const movieYear = movie.release_date ?? "unknown"
   const toggleClick = () => {
     if (!currentUser) return; 
 
@@ -35,11 +32,12 @@ const Card = ({ movie }: { movie: MovieType }) => {
       const newState = !prevState;
 
       if (newState) {
-        addFavorites(movie.id, movie.title, imageUrl);
+        addFavorites(movie.id, movie.title, imageUrl,movie?.release_date);
       } else {
         removeFromFavorites(movie.id);
       }
-
+      setFlash(true);
+      setTimeout(() => setFlash(false), 300)
       return newState;
     });
   };
@@ -58,19 +56,19 @@ const Card = ({ movie }: { movie: MovieType }) => {
         localStorage.removeItem("loggedUser")
       }
     });
-// for unmount
+
     return () => unsubscribe();
   }, []);
 
 
 
-  const addFavorites = async (movieId: number, movieName: string, movieImg: string) => {
+  const addFavorites = async (movieId: number| string , movieName: string, movieImg:string, movieYear:string) => {
     if (currentUser) {
       const userRef = doc(firestore, "users", currentUser.uid, "favorites", movieId.toString());
       await setDoc(userRef, {
-        name: movieName,
-        imageUrl: movieImg,
-        timestamp: new Date(),
+      title: movieName,
+        poster_path: movieImg,
+        release_date:movieYear
       });
     }
   };
@@ -102,7 +100,12 @@ const Card = ({ movie }: { movie: MovieType }) => {
   }, [movie.id, currentUser]);
 
   return (
-    <div className="pb-2 text-white border-white w-[180px] h-[320px] md:w-[200px] md:h-[350px] lg:w-[250px] lg:h-[420px] border-dotted border-2">
+    <motion.div 
+    variants={cardVariants}
+    initial="initial"
+    whileHover="whileHover"
+   
+    className="pb-2 text-white border-white w-[180px] h-[320px] md:w-[200px] md:h-[350px] lg:w-[250px] lg:h-[420px] border-dotted border-2">
       <div className="relative rounded-md">
         <Image
           className="object-cover"
@@ -118,8 +121,9 @@ const Card = ({ movie }: { movie: MovieType }) => {
           <button 
           disabled={!isLogged}  
           onClick={toggleClick}
-           className="w-[20px] h-[20px] absolute top-0 right-4">
-            {isFav ? <FaHeart size={32} color="red" /> : <FaRegHeart size={32} />}
+          className={` w-8 h-8 rounded-full bg-opacity-0   absolute top-2  right-6 bg-stone-300   ${flash ? 'flash' : ''}`}  
+>
+            {isFav ? <FaHeart className=' z-20 absolute top-0 right-0 ' size={32} color="red" /> : <FaRegHeart size={32} />}
           </button>
           <div className="relative justify-center gap-4">
             <p>{movieYear}</p>
@@ -127,14 +131,14 @@ const Card = ({ movie }: { movie: MovieType }) => {
               onClick={() => {
                 push(`/details?id=${movie.id}`);
               }}
-              className="italic absolute text-orange-500  bottom-0 right-0"
+              className="italic absolute text-orange-500  bottom-1 right-2"
             >
               More
             </button>
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

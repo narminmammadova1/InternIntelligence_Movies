@@ -4,8 +4,13 @@ import React, { useEffect, useState } from 'react'
 import { useDebounce } from 'use-debounce';
 import { GiHamburgerMenu } from "react-icons/gi";
 import { useRouter } from 'next/router';
-import { getAuth, signOut } from "firebase/auth";
+import {  signOut } from "firebase/auth";
 import {auth} from "../../firebase"
+import Sidebar from '../Sidebar/Sidebar';
+
+import {motion} from 'framer-motion'
+import { cardVariants, liVariants } from '@/motions';
+
 interface HeaderProps {
   onGenreChange: (genre: string) => void;
   onSearchChange:(search:string)=>void
@@ -19,41 +24,45 @@ const  Header: React.FC<HeaderProps> = ({ onGenreChange,onSearchChange }) => {
 const [searchQuery,setSearchQuery]=useState("")
 
 const [debouncedSearchQuery]=useDebounce(searchQuery,1000)
-const [searchResult,setSearchResult]=useState<any[]>([])
-const [loading,setLoading]=useState(false)
+// const [searchResult,setSearchResult]=useState<any[]>([])
+// const [loading,setLoading]=useState(false)
 const [isLogin, setIsLogin] = useState<null | string>(null);
 const [ modal,setModal]=useState(false)
-
-
+const [sidebar,setSidebar]=useState(false)
+// const[isFav,setIIsFav]=useState(true)
   const handleGenreClick = (selectedGenre: string) => {
     setGenre(selectedGenre) 
     onGenreChange(selectedGenre);
-  }
-  const searchMovies= async (query:string)=>{
+    // localStorage.removeItem("loginAndIsFav")
+    localStorage.setItem("loginAndIsFav","false")
+console.log(genre);
 
-    const apiKey = '7b948acabbc0eafc206827b05a3ac9b7';
-    const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${query}`;
-setLoading(true)
-try{
-const response=await fetch(url)
-const data=await response.json()
-const localSearch=data.results
-setSearchQuery(""); 
 
-}catch(err){console.log(err);
-}
-finally {
-  setLoading(false); 
-}
   }
+//   const searchMovies= async (query:string)=>{
+
+//     // const apiKey = '7b948acabbc0eafc206827b05a3ac9b7';
+//     // const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${query}`;
+// // setLoading(true)
+// try{
+// // const response=await fetch(url)
+// // const data=await response.json()
+// // const localSearch=data.results
+// setSearchQuery(""); 
+
+// }catch(err){console.log(err);
+// }
+// finally {
+//   // setLoading(false); 
+// }
+//   }
 
   useEffect(() => {
     if (debouncedSearchQuery) {
-      searchMovies(debouncedSearchQuery);
+      // searchMovies(debouncedSearchQuery);
+setSearchQuery(""); 
       
-    } else {
-      setSearchResult([]); 
-    }
+    } 
   }, [debouncedSearchQuery]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,13 +91,17 @@ const handleGetFavorites=()=>{
   }
   else{
     setModal(false)
+localStorage.setItem("loginAndIsFav","true")
+console.log("fava tiklandi");
+push("/favorites")
+
+
+
   }
 }
 const closeModal=()=>{
   setModal(false)
 }
-
-
 
 useEffect(() => {
   if (modal) {
@@ -101,47 +114,90 @@ useEffect(() => {
   return (
     <header className='bg-slate-900 w-full'>
       <div className='flex items-center justify-between ps-6'>
-        <div className=' text-2xl lg:text-4xl text-orange-500'>
-          MovieLand
+        <div
+       
+       
+        className=' text-2xl lg:text-4xl text-orange-500'>
+          <h1 
+       >MovieLand</h1>
         </div>
         <div className='hidden md:block' >
           <ul className='flex text-orange-500 justify-end gap-8 me-6'>
-            <li><Link href="/">Home</Link></li>
-            <li><Link href="/about">About</Link></li>
-            <li><Link href="/contact">Contact</Link></li>
+            <motion.li   variants={liVariants}
+                initial="initial"
+                whileHover="whileHover"
+               ><Link href="/">Home</Link></motion.li>
+            <motion.li variants={liVariants}
+                initial="initial"
+                whileHover="whileHover"
+               ><Link href="/about">About</Link></motion.li>
+            <motion.li 
+            variants={liVariants}
+                initial="initial"
+                whileHover="whileHover"
+                ><Link href="/contact">Contact</Link></motion.li>
             {isLogin === 'true' ? (
               <Link href="/">
-                <button onClick={
+                <motion.button
+                 variants={liVariants}
+                 initial="initial"
+                 whileHover="whileHover" 
+                onClick={
                   handleLogout
            } className='border-2 rounded-lg border-orange-500 px-2'>
                   Logout
-                </button>
+                </motion.button>
               </Link>
             ) : (
               <Link href="/login">
-                <button className='border-2 rounded-lg border-orange-500 px-2'>
+                <motion.button 
+                 variants={liVariants}
+                initial="initial"
+                whileHover="whileHover" className='border-2 rounded-lg border-orange-500 px-2'>
                   Sign In
-                </button>
+                </motion.button>
               </Link>
             )}
            
             
           </ul>
         </div>
-        <div className=' cursor-pointer block md:hidden  me-6'><GiHamburgerMenu color="white" size={28} />
+        <div onClick={()=>{setSidebar(true)}}  className='cursor-pointer block md:hidden  me-6'><GiHamburgerMenu color="white" size={28} />
         </div>
       </div>
 
       <div className='bg-orange-500 flex justify-end items-center py-2 pe-6'>
         <div className='hidden md:block'>
           <ul className='flex text-white gap-8 me-6'>
-          <li className=' cursor-pointer'  onClick={() => handleGetFavorites()}>My Favorites</li>
+          <motion.li 
+           variants={liVariants}
+           initial="initial"
+           whileHover="whileHover"
+          className=' cursor-pointer'  onClick={() => handleGetFavorites()}>My Favorites</motion.li>
 
-            <li className=' cursor-pointer' onClick={() => handleGenreClick("Action")}>Action</li>
-            <li className=' cursor-pointer'  onClick={() => handleGenreClick("Comedy")}>Comedy</li>
-            <li className=' cursor-pointer'  onClick={() => handleGenreClick("Animation")}>Animation</li>
-            <li className=' cursor-pointer'  onClick={() => handleGenreClick("Drama")}>Drama</li>
-            <li className=' cursor-pointer'  onClick={() => handleGenreClick("")}>All</li>
+            <motion.li 
+             variants={liVariants}
+             initial="initial"
+             whileHover="whileHover"
+             className=' cursor-pointer bg-red-500 bg-opacity-10 border-0 rounded-full' onClick={() => handleGenreClick("Action")}>Action</motion.li>
+            <motion.li
+             variants={liVariants}
+             initial="initial"
+             whileHover="whileHover"
+            
+            className=' cursor-pointer'  onClick={() => handleGenreClick("Comedy")}>Comedy</motion.li>
+            <motion.li 
+             variants={liVariants}
+             initial="initial"
+             whileHover="whileHover"
+            className=' cursor-pointer'  onClick={() => handleGenreClick("Animation")}>Animation</motion.li>
+            <motion.li
+             variants={liVariants}
+             initial="initial"
+             whileHover="whileHover" className=' cursor-pointer'  onClick={() => handleGenreClick("Drama")}>Drama</motion.li>
+            <motion.li  variants={liVariants}
+                initial="initial"
+                whileHover="whileHover" className=' cursor-pointer'  onClick={() => handleGenreClick("")}>All</motion.li>
 
           </ul>
         </div>
@@ -158,14 +214,27 @@ useEffect(() => {
         <div className="modal-overlay fixed top-0  left-0 w-full h-full bg-black bg-opacity-60 z-50 flex items-center justify-center">
           <div className="modal-content bg-white text-center rounded-md h-[30%] w-1/2 ">
             <h2 className=' text-lg text-orange-500 font-semibold mt-10'>Please log in to see your favorites!</h2>
-            <button   onClick={closeModal} className="px-4 py-1 border-2  bg-orange-500 text-white font-bold rounded-lg">Close</button>
-            <button onClick={()=>{
+            <motion.button 
+             variants={cardVariants}
+            initial="initial"
+             whileHover="whileHover"  onClick={closeModal} className="px-4 py-1 border-2  bg-orange-500 text-white font-bold rounded-lg">Close</motion.button>
+            <motion.button 
+             variants={cardVariants}
+                                      initial="initial"
+                                      whileHover="whileHover"
+            onClick={()=>{
               push("/login")
-            }} className="px-4 py-1 border-2  bg-orange-500 text-white font-bold rounded-lg">Sign in</button>
+            }} className="px-4 py-1 border-2  bg-orange-500 text-white font-bold rounded-lg">Sign in</motion.button>
 
           </div>
         </div>
       )}
+
+
+      {sidebar && (<div className='  top-0 right-0 fixed z-10'>
+<Sidebar handleGenreClick ={handleGenreClick} handleGetFavorites={handleGetFavorites} setSidebar={setSidebar}/>
+
+      </div>)}
     </header>
 
   )

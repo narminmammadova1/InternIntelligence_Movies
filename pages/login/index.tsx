@@ -3,6 +3,8 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
  import {auth} from "../../firebase"
 import React, { useState } from 'react'
+import {motion} from 'framer-motion'
+import { cardVariants} from '@/motions'
 
 const Login = () => {
  const [email,setEmail]=useState("")
@@ -42,7 +44,7 @@ router.push("/")
         {error && <div className="text-red-500 mb-4">{error}</div>}
 
         <form 
-          className='p-4 border-2 text-black mt-4 border-orange-500 rounded-md flex flex-col gap-4' 
+          className='p-8 border-2 text-black mt-4 border-orange-500 rounded-md flex flex-col gap-4' 
           onSubmit={handleLogin}  
         >
           <input 
@@ -61,17 +63,22 @@ router.push("/")
             onChange={(e) => setPassword(e.target.value)} 
           />
 
-          <button 
+          <motion.button   variants={cardVariants}
+                          initial="initial"
+                          whileHover="whileHover"
             type="submit" 
             className='w-full bg-orange-500 p-2 rounded-md'
           >
             Sign In
-          </button>
+          </motion.button>
         </form>
-
-        <Link href="/signup">
-          <button className='text-orange-500 mt-4'>... Sign up</button>
-        </Link>
+        <div className=''>
+  <p className=' inline-block pe-4'>If you don't have an account?</p>
+  <Link href="/signup">
+    <button className="text-orange-500 mt-4">Sign Up</button>
+  </Link>
+</div>
+       
       </div>
     </div>
   )

@@ -6,6 +6,8 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import {auth,createUserWithEmailAndPassword,firestore} from "../../firebase"
 import { doc, setDoc } from "firebase/firestore";
+import { cardVariants } from '@/motions'
+import {motion} from 'framer-motion'
 
 
 const SignUp = () => {
@@ -69,7 +71,7 @@ return (
         onSubmit={handleSignUp}
       >
         {() => (
-          <Form className='p-4 border-2 text-black mt-4 border-orange-500 rounded-md flex flex-col gap-4'>
+          <Form className='p-6 border-2 text-black mt-4 border-orange-500 rounded-md flex flex-col gap-4'>
             <Field
               className='p-2 rounded-md text-black'
               type="text"
@@ -110,7 +112,10 @@ return (
             />
             <ErrorMessage name="confirmPassword" component="div" className="text-red-500" />
 
-            <button type="submit" className='w-full rounded-md bg-orange-500 p-2'>Sign Up</button>
+            <motion.button 
+               variants={cardVariants}
+                                       initial="initial"
+                                       whileHover="whileHover"type="submit" className='w-full rounded-md bg-orange-500 p-2'>Sign Up</motion.button>
           </Form>
         )}
       </Formik>

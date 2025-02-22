@@ -1,10 +1,11 @@
 
-import React, { useEffect, useState } from 'react';
+import React  from 'react';
 import { useQuery } from 'react-query';
 import Card from '../Card/Card';
-import {db,ref,get,auth} from "../../firebase"
+import {  MovieType } from '@/interfaces/interfaces';
 
-const fetchMovies = async (genre: string, search:string) => {
+
+export const fetchMovies = async (genre: string, search:string) => {
   const apiKey = "7b948acabbc0eafc206827b05a3ac9b7";
   let url = "";
   if (search) {
@@ -30,61 +31,28 @@ const fetchMovies = async (genre: string, search:string) => {
 };
 
 
-const fetchFavorites=async(userId:string)=>{
-  const favoriteMovies=ref(db,"favorites/"+userId)
-const snapshot=await get(favoriteMovies)
-if(snapshot.exists()){
-  return snapshot.val()
-}else{
-  return[]
-}
-}
+const Movies: React.FC<{ genre: string, search:string}> = ({ genre ,search }) => {
 
-const Movies: React.FC<{ genre: string, search:string }> = ({ genre ,search }) => {
-
-const [userId,setUserId]=useState<string | null>(null)
-const [favoriteMovies,setFavoriteMovies]=useState([])
-useEffect(() => {
-  const user = auth.currentUser; 
-  console.log("userrr",user?.uid);
-  if (user) {
-    setUserId(user?.uid); 
-  }
-}, []);
-
-useEffect(() => {
-  if (userId) {
-    fetchFavorites(userId).then((movies) => {
-      setFavoriteMovies(movies); 
-    });
-  }
-}, [userId]);
-  const { data: movies, isLoading, isError, error } = useQuery(
+  const { data: movies, isLoading, isError, error } = useQuery<MovieType[]>(
     ['movies', genre,search],
     () => fetchMovies(genre,search),
      );
 
-  if (isLoading) return <div>Yükleniyor...</div>;
-  if (isError && error instanceof Error) return <div>Hata: {error.message}</div>;
+  if (isError && error instanceof Error) return <div>Error: {error.message}</div>;
+ 
+console.log("mooooovies",movies);
 
-
-  if (favoriteMovies.length > 0) {
-    return (
-      <div className="py-6 w-full md:px-0 px-4 flex justify-center">
-        <div className="grid grid-cols-2 sm:grid-cols-3 text-center md:grid-cols-4 lg:grid-cols-4 gap-10">
-          {favoriteMovies?.map((movie:any) => (
-            <Card key={movie.id} movie={movie} />
-          ))}
-        </div>
-      </div>
-    );
-  }
+if (!movies || isLoading) return<div className="flex w-full h-screen justify-center items-center">
+<div className=" w-20 h-20 border-t-4 border-blue-500 border-solid rounded-full   animate-spin"></div>
+</div>
   return (
-    <div className="py-6 w-full md:px-0 px-4 flex justify-center">
+    <div className="py-6 w-full md:px-0 px-2 flex justify-center">
       <div className="grid grid-cols-2 sm:grid-cols-3 text-center md:grid-cols-4 lg:grid-cols-4 gap-10">
-        {movies?.map((movie:any) => (
-          <Card key={movie.id} movie={movie} />
-        ))}
+      
+    {movies?.map((movie:MovieType ) => (
+
+<Card key={movie.id} movie={movie} />
+))}
       </div>
     </div>
   );
