@@ -131,7 +131,7 @@ const movieYear = movie.release_date ?? "unknown"
               onClick={() => {
                 push(`/details?id=${movie.id}`);
               }}
-              className="italic absolute text-orange-500  bottom-1 right-2"
+              className="italic  px-2 border-2 rounded-md absolute text-white bg-orange-500  bottom-12 right-0"
             >
               More
             </button>
